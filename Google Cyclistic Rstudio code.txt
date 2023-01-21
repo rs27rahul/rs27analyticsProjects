@@ -1,0 +1,274 @@
+#Install and load the following packages: 
+#tidyverse, readr, dplyr, lubridate, ggplot2.
+install.packages("tidyverse")
+install.packages("readr")
+install.packages("dplyr")
+install.packages("lubridate")
+install.packages("hms")
+install.packages("ggplot2")
+library(tidyverse)
+library(readr)
+library(dplyr)
+library(lubridate)
+library(hms)
+library(ggplot2)
+
+getwd() #displays your working directory
+setwd("/Users/sharm/Documents/GDA project files") #sets your working directory to the folder where your imported files are being kept
+
+
+
+#----------COLLECT DATA----------
+
+#Import the downloaded datasets:
+jan_2022 <- read_csv("202201-divvy-tripdata.csv")
+feb_2022 <- read_csv("202202-divvy-tripdata.csv")
+mar_2022 <- read_csv("202203-divvy-tripdata.csv")
+apr_2022 <- read_csv("202204-divvy-tripdata.csv")
+may_2022 <- read_csv("202205-divvy-tripdata.csv")
+jun_2022 <- read_csv("202206-divvy-tripdata.csv")
+jul_2022 <- read_csv("202207-divvy-tripdata.csv")
+aug_2022 <- read_csv("202208-divvy-tripdata.csv")
+sep_2022 <- read_csv("202209-divvy-publictripdata.csv")
+oct_2022 <- read_csv("202210-divvy-tripdata.csv")
+nov_2022 <- read_csv("202211-divvy-tripdata.csv")
+dec_2022 <- read_csv("202212-divvy-tripdata.csv")
+
+
+
+#----------WRANGLE DATA AND MERGE THEM INTO A SINGLE FILE----------
+
+#View the glimpse of the dataframes to check the whether the correct datasets are imported:
+glimpse(jan_2022)
+glimpse(feb_2022)
+glimpse(mar_2022)
+glimpse(apr_2022)
+glimpse(may_2022)
+glimpse(jun_2022)
+glimpse(jul_2022)
+glimpse(aug_2022)
+glimpse(sep_2022)
+glimpse(oct_2022)
+glimpse(nov_2022)
+glimpse(dec_2022)
+
+#Compare the column names of all the dataframes: 
+colnames(jan_2022)
+colnames(feb_2022)
+colnames(mar_2022)
+colnames(apr_2022)
+colnames(may_2022)
+colnames(jun_2022)
+colnames(jul_2022)
+colnames(aug_2022)
+colnames(sep_2022)
+colnames(oct_2022)
+colnames(nov_2022)
+colnames(dec_2022)
+
+#Inspect the dataframes and look for incongruencies:
+str(jan_2022)
+str(feb_2022)
+str(mar_2022)
+str(apr_2022)
+str(may_2022)
+str(jun_2022)
+str(jul_2022)
+str(aug_2022)
+str(sep_2022)
+str(oct_2022)
+str(nov_2022)
+str(dec_2022)
+
+#Stack individual month's data frames into one big data frame:
+cyclistic_2022 <- rbind(jan_2022,
+                        feb_2022,
+                        mar_2022,
+                        apr_2022,
+                        may_2022,
+                        jun_2022,
+                        jul_2022,
+                        aug_2022,
+                        sep_2022,
+                        oct_2022,
+                        nov_2022,
+                        dec_2022)
+
+#View the new data frame
+View(cyclistic_2022)
+
+
+
+#----------CLEAN UP OR ADD DATA TO PREPARE FOR ANALYSIS----------
+
+#Rename the "member_casual" column to "user_type":
+cyclistic_2022 <-rename(cyclistic_2022,
+                        user_type = member_casual)
+
+#Delete individual month dataframes to clear up space in memory:
+rm(jan_2022, 
+   feb_2022, 
+   mar_2022, 
+   apr_2022, 
+   may_2022, 
+   jun_2022, 
+   jul_2022, 
+   aug_2022,
+   sep_2022,
+   oct_2022,
+   nov_2022,
+   dec_2022)
+
+#Remove unrequired columns from the cyclistic_2022 data frame:
+cyclistic_2022 <- cyclistic_2022 %>% 
+  select(-c(ride_id, start_station_id, end_station_id,start_lat, start_lng, end_lat, end_lng))
+
+#Remove rows with NA values:
+cyclistic_2022 <- na.omit(cyclistic_2022)
+
+#Remove duplicate rows:
+cyclistic_2022 <- distinct(cyclistic_2022)
+
+#Inspecting the cyclistic_2022 after all the changes done previously:
+#View the column names 
+colnames(cyclistic_2022)
+#View the number of rows
+nrow(cyclistic_2022)
+#View the number of columns
+ncol(cyclistic_2022)
+#View the dimensions of the dataframe
+dim(cyclistic_2022)
+#View the first 6 rows of the dataframe
+head(cyclistic_2022)
+#View the list of columns and data types of each column
+str(cyclistic_2022)
+#View the statistical summary of the dataframe
+summary(cyclistic_2022)
+
+#To view the distinct rows in user_type use:
+table(cyclistic_2022$user_type)
+
+#Add columns that list the date, month, day, and year of each ride
+#This will allow us to aggregate ride data for each month, day, or year...
+#before completing these operations we could only aggregate at the ride level:
+cyclistic_2022$date <- as.Date(cyclistic_2022$started_at) #The default format is YYYY-MM-DD
+cyclistic_2022$month <- format(as.Date(cyclistic_2022$date), "%m")
+cyclistic_2022$day <- format(as.Date(cyclistic_2022$date), "%d")
+cyclistic_2022$year <- format(as.Date(cyclistic_2022$date), "%Y")
+cyclistic_2022$day_of_week <- format(as.Date(cyclistic_2022$date), "%A")
+cyclistic_2022$time <- as_hms(cyclistic_2022$started_at)
+cyclistic_2022$hour <- hour(cyclistic_2022$time)
+
+#Column for month name and year:
+cyclistic_2022 <- cyclistic_2022 %>% 
+  mutate(month_and_year = 
+           case_when (month == 1 ~ "Jan 2022",
+                      month == 2 ~ "Feb 2022",
+                      month == 3 ~ "Mar 2022",
+                      month == 4 ~ "Apr 2022",
+                      month == 5 ~ "May 2022",
+                      month == 6 ~ "Jun 2022",
+                      month == 7 ~ "Jul 2022",
+                      month == 8 ~ "Aug 2022",
+                      month == 9 ~ "Sep 2022",
+                      month == 10 ~ "Oct 2022",
+                      month == 11 ~ "Nov 2022",
+                      month == 12 ~ "Dec 2022"))
+
+#Column for times of day:
+cyclistic_2022 <- cyclistic_2022 %>% 
+  mutate(times_of_day = 
+           case_when(hour == 0 ~ "Night",
+                     hour == 1 ~ "Night",
+                     hour == 2 ~ "Night",
+                     hour == 3 ~ "Night",
+                     hour == 4 ~ "Night",
+                     hour == 5 ~ "Night",
+                     hour == 6 ~ "Morning",
+                     hour == 7 ~ "Morning",
+                     hour == 8 ~ "Morning",
+                     hour == 9 ~ "Morning",
+                     hour == 10 ~ "Morning",
+                     hour == 11 ~ "Morning",
+                     hour == 12 ~ "Afternoon",
+                     hour == 13 ~ "Afternoon",
+                     hour == 14 ~ "Afternoon",
+                     hour == 15 ~ "Afternoon",
+                     hour == 16 ~ "Afternoon",
+                     hour == 17 ~ "Afternoon",
+                     hour == 18 ~ "Evening",
+                     hour == 19 ~ "Evening",
+                     hour == 20 ~ "Evening",
+                     hour == 21 ~ "Evening",
+                     hour == 22 ~ "Evening",
+                     hour == 23 ~ "Evening"))
+
+#Convert "day", "month", and "year' to numeric data type:
+cyclistic_2022$day <- as.numeric(cyclistic_2022$day)
+cyclistic_2022$month <- as.numeric(cyclistic_2022$month)
+cyclistic_2022$year <- as.numeric(cyclistic_2022$year)
+
+
+#Add a "ride_length" column to cyclistic_2022 (in mins)
+cyclistic_2022$ride_length <- difftime(cyclistic_2022$ended_at, 
+                                       cyclistic_2022$started_at, units = "mins")
+cyclistic_2022$ride_length <- round(cyclistic_2022$ride_length)
+
+#Inspect the structure of the columns after previous changes being done
+str(cyclistic_2022)
+
+#Convert "ride_length" from current data type to numeric so we can run calculations on the data
+class(cyclistic_2022$ride_length)
+cyclistic_2022$ride_length <- as.numeric(cyclistic_2022$ride_length)
+is.numeric(cyclistic_2022$ride_length)
+
+#Remove values of "ride_length", where it is 0 or negative
+cyclistic_2022 <- cyclistic_2022[!(cyclistic_2022$ride_length <= 0),]
+
+#Fixing the order of days of week:
+cyclistic_2022$day_of_week <- ordered(cyclistic_2022$day_of_week, levels = c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"))
+
+#Fixing the order of months and year:
+cyclistic_2022$month_and_year <- ordered(cyclistic_2022$month_and_year, levels = c("Jan 2022", "Feb 2022", "Mar 2022", "Apr 2022", "May 2022", "Jun 2022", "Jul 2022", "Aug 2022", "Sep 2022", "Oct 2022", "Nov 2022", "Dec 2022"))
+
+#Fixing the order of times_of_day:
+cyclistic_2022$times_of_day <- ordered(cyclistic_2022$times_of_day, levels = c("Morning", "Afternoon", "Evening", "Night"))
+
+
+
+#----------CONDUCT DESCRIPTIVE ANALYSIS----------
+
+#Descriptive analysis on "ride_length"(all figures in seconds):
+mean(cyclistic_2022$ride_length) #average of ride_length
+median(cyclistic_2022$ride_length) #midpoint number in the ascending array of ride_length
+max(cyclistic_2022$ride_length) #longest ride
+min(cyclistic_2022$ride_length) #shortest ride
+
+#Compare members and casual users
+aggregate(cyclistic_2022$ride_length ~ cyclistic_2022$user_type, FUN = mean)
+aggregate(cyclistic_2022$ride_length ~ cyclistic_2022$user_type, FUN = median)
+aggregate(cyclistic_2022$ride_length ~ cyclistic_2022$user_type, FUN = max)
+aggregate(cyclistic_2022$ride_length ~ cyclistic_2022$user_type, FUN = min)
+
+#View the average ride time by each day for members vs casual users:
+aggregate(cyclistic_2022$ride_length ~ cyclistic_2022$user_type + cyclistic_2022$day_of_week, FUN = mean)
+
+#analyze ridership data by type and weekday:
+cyclistic_2022 %>% 
+  mutate(weekday = wday(started_at, label = TRUE)) %>% #creates weekday field using wday()
+  group_by(user_type, weekday) %>% #groups by user_type and weekday
+  summarize(number_of_rides = n(),average_duration = mean(ride_length)) %>% 
+  arrange(user_type, weekday)
+
+#Let's make a copy of the "cyclistic_2022" data frame and sort the data frame by month and day:
+cyclistic_2022_v2 <- cyclistic_2022
+cyclistic_2022_v2 <- cyclistic_2022_v2 %>% 
+  arrange(month, day, time)
+View(cyclistic_2022_v2)
+
+
+
+#----------EXPORT SUMMARY FILE FOR FURTHER ANALYSIS (DATA VISUALIZATION)----------
+
+#export the file as "cyclistic_tableau.csv":
+write.csv(cyclistic_2022_v2, "cyclistic_tableau.csv")
