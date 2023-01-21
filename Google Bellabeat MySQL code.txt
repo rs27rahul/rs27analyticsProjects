@@ -1,0 +1,626 @@
+-- Select Database "bellabeat":
+USE bellabeat;
+
+----------DATA EXPLORATION----------;
+
+-- Create an empty table - "daily_activity":
+CREATE TABLE daily_activity(
+id double,
+date varchar(30),
+total_steps double,
+total_distance double,
+tracker_distance double,
+logged_activities_distance double,
+very_active_distance double,
+moderate_active_distance double,
+light_active_distance double,
+sedentary_active_distance double,
+very_active_minutes double,
+fairly_active_minutes double,
+lightly_active_minutes double,
+sedentary_minutes double,
+calories double
+);
+
+-- Importing the csv data file "dailyActivity_merged.csv" to "daily_activity" table:
+LOAD DATA LOCAL INFILE 'C:/Users/sharm/Documents/mySQL files/Fitabase Data/dailyActivity_merged.csv'
+INTO TABLE daily_activity
+FIELDS TERMINATED BY ','
+OPTIONALLY ENCLOSED BY '"'
+LINES TERMINATED BY '\r\n'
+IGNORE 1 ROWS;
+
+-- Check if the correct dataset is imported:
+SELECT *
+FROM daily_activity;
+
+-- Create an empty table - "heartrate_seconds":
+CREATE TABLE heartrate_seconds(
+id double,
+date_time varchar(30),
+heartrate_value double
+);
+
+-- Importing the csv data file "heartrate_seconds_merged.csv" to "heartrate_seconds" table:
+LOAD DATA LOCAL INFILE 'C:/Users/sharm/Documents/mySQL files/Fitabase Data/heartrate_seconds_merged.csv'
+INTO TABLE heartrate_seconds
+FIELDS TERMINATED BY ','
+OPTIONALLY ENCLOSED BY '"'
+LINES TERMINATED BY '\r\n'
+IGNORE 1 ROWS;
+
+-- Check if the correct data is imported:
+SELECT *
+FROM heartrate_seconds;
+
+-- Create empty table - "hourly_calories":
+CREATE TABLE hourly_calories(
+id double,
+activity_hour varchar(30),
+calories double
+);
+
+-- Importing the csv data file "hourlyCalories_merged.csv" to "hourly_calories" table:
+LOAD DATA LOCAL INFILE 'C:/Users/sharm/Documents/mySQL files/Fitabase Data/hourlyCalories_merged.csv'
+INTO TABLE hourly_calories
+FIELDS TERMINATED BY ','
+OPTIONALLY ENCLOSED BY '"'
+LINES TERMINATED BY '\r\n'
+IGNORE 1 ROWS;
+
+-- Check if the correct dataset is imported:
+SELECT *
+FROM hourly_calories;
+
+-- Create an empty table - "hourly_intensities":
+CREATE TABLE hourly_intensities(
+id double,
+activity_hour varchar(30),
+total_intensity double,
+average_intensity double
+);
+
+-- Importing the csv data file "hourlyIntensities_merged.csv" to "hourly_intensities" table:
+LOAD DATA LOCAL INFILE 'C:/Users/sharm/Documents/mySQL files/Fitabase Data/hourlyIntensities_merged.csv'
+INTO TABLE hourly_intensities
+FIELDS TERMINATED BY ','
+OPTIONALLY ENCLOSED BY '"'
+LINES TERMINATED BY '\r\n'
+IGNORE 1 ROWS;
+
+-- Check if the correct dataset is imported:
+SELECT *
+FROM hourly_intensities;
+
+-- Create an empty table - "hourlySteps":
+CREATE TABLE hourly_steps(
+id double,
+activity_hour varchar(30),
+total_steps double
+);
+
+-- Importing the csv data file "hourlySteps_merged.csv" to "hourly_steps" table:
+LOAD DATA LOCAL INFILE 'C:/Users/sharm/Documents/mySQL files/Fitabase Data/hourlySteps_merged.csv'
+INTO TABLE hourly_steps
+FIELDS TERMINATED BY ','
+OPTIONALLY ENCLOSED BY '"'
+LINES TERMINATED BY '\r\n'
+IGNORE 1 ROWS;
+
+-- Check if the correct dataset is imported:
+SELECT *
+FROM hourly_steps;
+
+-- Create an empty table - "minute_calories_narrow":
+CREATE TABLE minute_calories_narrow(
+id double,
+activity_minute varchar(30),
+calories double
+);
+
+-- Importing the csv data file "minuteCaloriesNarrow_merged.csv" to "minute_calories_narrow" table:
+LOAD DATA LOCAL INFILE 'C:/Users/sharm/Documents/mySQL files/Fitabase Data/minuteCaloriesNarrow_merged.csv'
+INTO TABLE minute_calories_narrow
+FIELDS TERMINATED BY ','
+OPTIONALLY ENCLOSED BY '"'
+LINES TERMINATED BY '\r\n'
+IGNORE 1 ROWS;
+
+-- Check if the correct dataset is imported:
+SELECT *
+FROM minute_calories_narrow;
+
+-- Create an empty table - "minute_intensities_narrow":
+CREATE TABLE minute_intensities_narrow(
+id double,
+activity_minute varchar(30),
+intensity double
+);
+
+-- Importing the csv data file "minuteIntensitiesNarrow_merged" to "minute_intensities_narrow" table:
+LOAD DATA LOCAL INFILE 'C:/Users/sharm/Documents/mySQL files/Fitabase Data/minuteIntensitiesNarrow_merged.csv'
+INTO TABLE minute_intensities_narrow
+FIELDS TERMINATED BY ','
+OPTIONALLY ENCLOSED BY '"'
+LINES TERMINATED BY '\r\n'
+IGNORE 1 ROWS;
+
+-- Check if the correct dataset is imported:
+SELECT *
+FROM minute_intensities_narrow;
+
+-- Create an empty table - "minute_mets_narrow":
+CREATE TABLE minute_mets_narrow(
+id double,
+activity_minute varchar(30),
+mets double
+);
+
+-- Importing the csv data file "minuteMETsNarrow_merged" to "minute_mets_narrow" table:
+LOAD DATA LOCAL INFILE 'C:/Users/sharm/Documents/mySQL files/Fitabase Data/minuteMETsNarrow_merged.csv'
+INTO TABLE minute_mets_narrow
+FIELDS TERMINATED BY ','
+OPTIONALLY ENCLOSED BY '"'
+LINES TERMINATED BY '\r\n'
+IGNORE 1 ROWS;
+
+-- Check if the correct dataset is imported:
+SELECT *
+FROM minute_mets_narrow;
+
+-- Create an empty table - "minute_sleep":
+CREATE TABLE minute_sleep(
+id double,
+date_time varchar(30),
+sleep_value double,
+log_id double
+);
+
+-- Importing the csv data file "minuteSleep_merged" to "minute_sleep" table:
+LOAD DATA LOCAL INFILE 'C:/Users/sharm/Documents/mySQL files/Fitabase Data/minuteSleep_merged.csv'
+INTO TABLE minute_sleep
+FIELDS TERMINATED BY ','
+OPTIONALLY ENCLOSED BY '"'
+LINES TERMINATED BY '\r\n'
+IGNORE 1 ROWS;
+
+-- Check if the correct dataset is imported:
+SELECT *
+FROM minute_sleep;
+
+-- Create an empty table "minute_steps_narrow":
+CREATE TABLE minute_steps_narrow(
+id double,
+activity_minute varchar(30),
+steps double
+);
+
+-- Importing the csv data file "minuteStepsNarrow_merged" to "minute_steps_narrow" table:
+LOAD DATA LOCAL INFILE 'C:/Users/sharm/Documents/mySQL files/Fitabase Data/minuteStepsNarrow_merged.csv'
+INTO TABLE minute_steps_narrow
+FIELDS TERMINATED BY ','
+OPTIONALLY ENCLOSED BY '"'
+LINES TERMINATED BY '\r\n'
+IGNORE 1 ROWS;
+
+-- Check if the correct dataset is imported:
+SELECT *
+FROM minute_steps_narrow;
+
+-- Create an empty table - "sleep_day":
+CREATE TABLE sleep_day(
+id double,
+sleep_date varchar(30),
+total_sleep double,
+total_minutes_asleep double,
+total_time_in_bed double
+);
+
+-- Importing the csv data file "sleepDay_merged" to "sleep_day" table:
+LOAD DATA LOCAL INFILE 'C:/Users/sharm/Documents/mySQL files/Fitabase Data/sleepDay_merged.csv'
+INTO TABLE sleep_day
+FIELDS TERMINATED BY ','
+OPTIONALLY ENCLOSED BY '"'
+LINES TERMINATED BY '\r\n'
+IGNORE 1 ROWS;
+
+-- Check if the correct dataset is imported:
+SELECT *
+FROM sleep_day;
+
+-- Create an empty table - "weight_log_info":
+CREATE TABLE weight_log_info(
+id double,
+date_time varchar(30),
+weight_kg double,
+weight_pounds double,
+fat double,
+bmi double,
+is_manual_report varchar(10),
+log_id double
+);
+
+-- Importing the csv data file "weightLogInfo_merged" to "weight_log_info" table:
+LOAD DATA LOCAL INFILE 'C:/Users/sharm/Documents/mySQL files/Fitabase Data/weightLogInfo_merged.csv'
+INTO TABLE weight_log_info
+FIELDS TERMINATED BY ','
+OPTIONALLY ENCLOSED BY '"'
+LINES TERMINATED BY '\r\n'
+IGNORE 1 ROWS;
+
+-- Check if the correct dataset imported:
+SELECT *
+FROM weight_log_info;
+
+
+----------DATA CLEANING----------;
+
+-- Rectify the date format in "daily_activity" table:
+UPDATE daily_activity
+SET activity_date = STR_TO_DATE(activity_date, '%m/%d/%Y');
+
+-- Format the decimal value to 2 places in "daily_activity" table:
+UPDATE daily_activity
+SET total_distance = FORMAT(total_distance, 2),
+	tracker_distance = FORMAT(tracker_distance, 2),
+    very_active_distance = FORMAT(very_active_distance, 2),
+    moderate_active_distance = FORMAT(moderate_active_distance, 2),
+    light_active_distance = FORMAT(light_active_distance, 2),
+    sedentary_active_distance = FORMAT(sedentary_active_distance, 2),
+    logged_activities_distance = FORMAT(logged_activities_distance, 2);
+
+-- Check the updated table "daily_activity":   
+SELECT *
+FROM daily_activity;
+
+-- Rectify the date format in "heartrate_seconds" table
+UPDATE heartrate_seconds
+SET date_time = STR_TO_DATE(date_time, '%m/%d/%Y %h:%i:%s %p');
+
+-- Create new table "heartrate_seconds_v2" to split date_time column:
+CREATE TABLE heartrate_seconds_v2 AS
+SELECT id, DATE_FORMAT(date_time, '%Y-%m-%d') as date, DATE_FORMAT(date_time, '%H:%i:%s') as time, heartrate_value
+FROM heartrate_seconds;
+
+-- Drop the table "heartrate_seconds":
+DROP TABLE heartrate_seconds;
+
+-- Check the new table "heartrate_seconds_v2":
+SELECT *
+FROM heartrate_seconds_v2;
+
+-- Rectify the date format in "hourly_calories" table:
+UPDATE hourly_calories
+SET activity_hour = STR_TO_DATE(activity_hour, '%m/%d/%Y %h:%i:%s %p');
+
+-- Create new table "hourly_calories_v2" table:
+CREATE TABLE hourly_calories_v2 AS
+SELECT id, DATE_FORMAT(activity_hour, '%Y-%m-%d') as date, DATE_FORMAT(activity_hour, '%H:%i:%s') as time, calories
+FROM hourly_calories;
+
+-- Check the new table "hourly_calories_v2":
+SELECT *
+FROM hourly_calories_v2;
+
+-- Drop the table "hourly_calories":
+DROP TABLE hourly_calories;
+
+-- Rectify the date format in "hourly_intensities" table:
+UPDATE hourly_intensities
+SET activity_hour = STR_TO_DATE(activity_hour, '%m/%d/%Y %h:%i:%s %p');
+
+-- Create new table "hourly_intensities_v2" table:
+CREATE TABLE hourly_intensities_v2 AS
+SELECT id, DATE_FORMAT(activity_hour, '%Y-%m-%d') as date, DATE_FORMAT(activity_hour, '%H:%i:%s') as time, total_intensity, average_intensity
+FROM hourly_intensities;
+
+-- Check the new table "hourly_intensities_v2":
+SELECT *
+FROM hourly_intensities_v2;
+
+-- Drop the table "hourly_intensities":
+DROP TABLE hourly_intensities;
+
+-- Rectify the date format in "hourly_steps" table:
+UPDATE hourly_steps
+SET activity_hour = STR_TO_DATE(activity_hour, '%m/%d/%Y %h:%i:%s %p');
+
+-- Create new table "hourly_steps_v2" table:
+CREATE TABLE hourly_steps_v2 AS
+SELECT id, DATE_FORMAT(activity_hour, '%Y-%m-%d') as date, DATE_FORMAT(activity_hour, '%H:%i:%s') as time, total_steps
+FROM hourly_steps;
+
+-- Check the new table "hourly_steps_v2":
+SELECT *
+FROM hourly_steps_v2;
+
+-- Drop the table "hourly_steps":
+DROP TABLE hourly_steps;
+
+-- Rectify the date format in "minute_calories_narrow" table:
+UPDATE minute_calories_narrow
+SET activity_minute = STR_TO_DATE(activity_minute, '%m/%d/%Y %h:%i:%s %p');
+
+-- Format the decimal value to 2 places in "minute_calories_narrow" table:
+UPDATE minute_calories_narrow
+SET calories = FORMAT(calories, 2);
+
+-- Create new table "minute_calories_v2" table:
+CREATE TABLE minute_calories_v2 AS
+SELECT id, DATE_FORMAT(activity_minute, '%Y-%m-%d') as date, DATE_FORMAT(activity_minute, '%H:%i:%s') as time, calories
+FROM minute_calories_narrow;
+
+-- Check the new table "minute_calories_v2":
+SELECT *
+FROM minute_calories_v2;
+
+-- Drop the table "minute_calories_narrow":
+DROP TABLE minute_calories_narrow;
+
+-- Rectify the date format in "minute_intensities_narrow" table:
+UPDATE minute_intensities_narrow
+SET activity_minute = STR_TO_DATE(activity_minute, '%m/%d/%Y %h:%i:%s %p');
+
+-- Create new table "minute_intensities_v2" table:
+CREATE TABLE minute_intensities_v2 AS
+SELECT id, DATE_FORMAT(activity_minute, '%Y-%m-%d') as date, DATE_FORMAT(activity_minute, '%H:%i:%s') as time, intensity
+FROM minute_intensities_narrow;
+
+-- Check the new table "minute_intensities_v2":
+SELECT *
+FROM minute_intensities_v2;
+
+-- Drop the table "minute_intensities_narrow":
+DROP TABLE minute_intensities_narrow;
+
+-- Rectify the date format in "minute_steps_narrow" table:
+UPDATE minute_steps_narrow
+SET activity_minute = STR_TO_DATE(activity_minute, '%m/%d/%Y %h:%i:%s %p');
+
+-- Create new table "minute_steps_v2" table:
+CREATE TABLE minute_steps_v2 AS
+SELECT id, DATE_FORMAT(activity_minute, '%Y-%m-%d') as date, DATE_FORMAT(activity_minute, '%H:%i:%s') as time, steps
+FROM minute_steps_narrow;
+
+-- Check the new table "minute_steps_v2":
+SELECT *
+FROM minute_steps_v2;
+
+-- Drop the table "minute_steps_narrow":
+DROP TABLE minute_steps_narrow;
+
+-- Rectify the date format in "minute_mets_narrow" table:
+UPDATE minute_mets_narrow
+SET activity_minute = STR_TO_DATE(activity_minute, '%m/%d/%Y %h:%i:%s %p');
+
+-- Create new table "minute_mets_v2" table:
+CREATE TABLE minute_mets_v2 AS
+SELECT id, DATE_FORMAT(activity_minute, '%Y-%m-%d') as date, DATE_FORMAT(activity_minute, '%H:%i:%s') as time, mets
+FROM minute_mets_narrow;
+
+-- Check the new table "minute_mets_v2":
+SELECT *
+FROM minute_mets_v2;
+
+-- Drop the table "minute_mets_narrow":
+DROP TABLE minute_mets_narrow;
+
+-- Rectify the date format in "minute_sleep" table:
+UPDATE minute_sleep
+SET date_time = STR_TO_DATE(date_time, '%m/%d/%Y %h:%i:%s %p');
+
+-- Create new table "minute_sleep_v2" table:
+CREATE TABLE minute_sleep_v2 AS
+SELECT id, DATE_FORMAT(date_time, '%Y-%m-%d') as date, DATE_FORMAT(date_time, '%H:%i:%s') as time, sleep_value, log_id
+FROM minute_sleep;
+
+-- Check the new table "minute_sleep_v2":
+SELECT *
+FROM minute_sleep_v2;
+
+-- Drop the table "minute_sleep":
+DROP TABLE minute_sleep;
+
+-- Rectify the date format in "sleep_day" table:
+UPDATE sleep_day
+SET sleep_date = STR_TO_DATE(sleep_date, '%m/%d/%Y %h:%i:%s %p');
+
+-- Create new table "daily_sleep" table:
+CREATE TABLE daily_sleep AS
+SELECT id, DATE_FORMAT(sleep_date, '%Y-%m-%d') as date, DATE_FORMAT(sleep_date, '%H:%i:%s') as time, total_sleep, total_minutes_asleep, total_time_in_bed
+FROM sleep_day;
+
+-- Check the new table "daily_sleep":
+SELECT *
+FROM daily_sleep;
+
+-- Drop the table "sleep_day":
+DROP TABLE sleep_day;
+
+-- Rectify the date format in "weight_log_info" table:
+UPDATE weight_log_info
+SET date_time = STR_TO_DATE(date_time, '%m/%d/%Y %h:%i:%s %p');
+
+-- Format the decimal value to 2 places in "weight_log_info" table:
+UPDATE weight_log_info
+SET weight_kg = FORMAT(weight_kg, 2),
+	weight_pounds = FORMAT(weight_pounds, 2),
+    bmi = FORMAT(bmi, 2);
+    
+-- Create new table "weight_log_info_v2" table:
+CREATE TABLE weight_log_info_v2 AS
+SELECT id, DATE_FORMAT(date_time, '%Y-%m-%d') as date, DATE_FORMAT(date_time, '%H:%i:%s') as time, weight_kg, weight_pounds, fat, bmi, is_manual_report, log_id
+FROM weight_log_info;
+
+-- Check the new table "weight_log_info_v2":
+SELECT *
+FROM weight_log_info_v2;
+
+-- Drop the table "weight_log_info":
+DROP TABLE weight_log_info;
+
+-- Join tables "hourly_calories_v2", "hourly_intensities_v2", "hourly_steps_v2" to create table "hourly_activity":
+CREATE TABLE hourly_activity AS 
+SELECT c.id, c.date, c.time, c.calories, i.total_intensity, i.average_intensity, s.total_steps
+FROM hourly_calories_v2 c
+NATURAL JOIN hourly_intensities_v2 i
+NATURAL JOIN hourly_steps_v2 s;
+
+-- Drop tables "hourly_calories_v2", "hourly_intensities_v2", "hourly_steps_v2":
+DROP TABLES hourly_calories_v2, hourly_intensities_v2, hourly_steps_v2;
+
+-- Join tables "minute_calories_v2", "minute_intensities_v2", "minute_steps_v2", "minute_mets_v2" to create table "minute_activity":
+CREATE TABLE minute_activity AS 
+SELECT c.id, c.date, c.time, c.calories, i.intensity, s.steps, m.mets
+FROM minute_calories_v2 c
+NATURAL JOIN minute_intensities_v2 i
+NATURAL JOIN minute_steps_v2 s
+NATURAL JOIN minute_mets_v2 m; 
+
+-- Drop tables "minute_calories_v2", "minute_intensities_v2", "minute_steps_v2", "minute_mets_v2":
+DROP TABLES minute_calories_v2, minute_intensities_v2, minute_steps_v2, minute_mets_v2;
+
+-- Delete rows from table "daily_activity" where total steps is 0 (excluding calories = 0) and calories is less than 1800:
+DELETE FROM daily_activity
+WHERE total_steps = 0
+AND calories < 1800
+AND calories <> 0;
+
+-- Delete rows from table "hourly_activity" where total steps is 0 and calories is less than 45:
+DELETE FROM hourly_activity
+WHERE total_steps = 0
+AND calories < 45;
+
+-- Delete rows from table "minute_activity" where steps is 0 (excluding calories = 0) and calories is less than 1.25:
+DELETE FROM minute_activity
+WHERE steps = 0
+AND calories < 1.25
+AND calories <> 0;
+
+
+---------- DESCRIPTIVE ANALYSIS----------;
+
+-- Using the COUNT function to find the no. of rows in each table:
+SELECT COUNT(id)
+FROM daily_activity;
+
+SELECT COUNT(id)
+FROM daily_sleep;
+
+SELECT COUNT(id)
+FROM heartrate_seconds_v2;
+
+SELECT COUNT(id)
+FROM hourly_activity;
+
+SELECT COUNT(id)
+FROM minute_activity;
+
+SELECT COUNT(id)
+FROM minute_sleep_v2;
+
+SELECT COUNT(id)
+FROM weight_log_info_v2;
+
+-- Using the COUNT(DISTINCT) function to look for no. of participants in each table:
+SELECT COUNT(DISTINCT id)
+FROM daily_activity;
+
+SELECT COUNT(DISTINCT id)
+FROM daily_sleep;
+
+SELECT COUNT(DISTINCT id)
+FROM heartrate_seconds_v2;
+
+SELECT COUNT(DISTINCT id)
+FROM hourly_activity;
+
+SELECT COUNT(DISTINCT id)
+FROM minute_activity;
+
+SELECT COUNT(DISTINCT id)
+FROM minute_sleep_v2;
+
+SELECT COUNT(DISTINCT id)
+FROM weight_log_info_v2;
+
+-- Using AVG function to calculate mean of different values in each table:
+SELECT AVG(total_steps), AVG(total_distance), AVG(very_active_minutes), AVG(fairly_active_minutes), AVG(lightly_active_minutes), AVG(sedentary_minutes), AVG(calories)
+FROM daily_activity;
+
+SELECT AVG(total_sleep), AVG(total_minutes_asleep), AVG(total_time_in_bed)
+FROM daily_sleep;
+
+SELECT AVG(heartrate_value)
+FROM heartrate_seconds_v2;
+
+SELECT AVG(calories), AVG(total_intensity), AVG(total_steps)
+FROM hourly_activity;
+
+SELECT AVG(calories), AVG(intensity), AVG(steps), AVG(mets)
+FROM minute_activity;
+
+SELECT AVG(sleep_value)
+FROM minute_sleep_v2;
+
+SELECT AVG(weight_kg), AVG(weight_pounds), AVG(fat), AVG(bmi)
+FROM weight_log_info_v2;
+
+
+-----------EXPORT THE TABLES TO CSV FILES FOR FURTHER ANALYSIS (DATA VISUALIZATION)----------;
+
+-- Exporting the "daily_activity" table:
+SELECT * FROM daily_activity
+INTO OUTFILE 'C:/Users/sharm/Documents/mySQL files/daily_activity.csv' 
+FIELDS ENCLOSED BY '"'
+TERMINATED BY ';'
+ESCAPED BY '"'
+LINES TERMINATED BY '\r\n';  
+
+-- Exporting the "daily_sleep" table:
+SELECT * FROM daily_sleep
+INTO OUTFILE 'C:/Users/sharm/Documents/mySQL files/daily_sleep.csv' 
+FIELDS ENCLOSED BY '"'
+TERMINATED BY ';'
+ESCAPED BY '"'
+LINES TERMINATED BY '\r\n';  
+
+-- Exporting the "heartrate_seconds_v2" table:
+SELECT * FROM heartrate_seconds_v2
+INTO OUTFILE 'C:/Users/sharm/Documents/mySQL files/heartrate_seconds.csv' 
+FIELDS ENCLOSED BY '"'
+TERMINATED BY ';'
+ESCAPED BY '"'
+LINES TERMINATED BY '\r\n';  
+
+-- Exporting the "hourly_activity" table:
+SELECT * FROM hourly_activity
+INTO OUTFILE 'C:/Users/sharm/Documents/mySQL files/hourly_activity.csv' 
+FIELDS ENCLOSED BY '"'
+TERMINATED BY ';'
+ESCAPED BY '"'
+LINES TERMINATED BY '\r\n';  
+
+-- Exporting the "minute_activity" table:
+SELECT * FROM minute_activity
+INTO OUTFILE 'C:/Users/sharm/Documents/mySQL files/minute_activity.csv' 
+FIELDS ENCLOSED BY '"'
+TERMINATED BY ';'
+ESCAPED BY '"'
+LINES TERMINATED BY '\r\n';  
+
+-- Exporting the "minute_sleep_v2" table:
+SELECT * FROM minute_sleep_v2
+INTO OUTFILE 'C:/Users/sharm/Documents/mySQL files/minute_sleep.csv' 
+FIELDS ENCLOSED BY '"'
+TERMINATED BY ';'
+ESCAPED BY '"'
+LINES TERMINATED BY '\r\n';  
+
+-- Exporting the "weight_log_info_v2" table:
+SELECT * FROM weight_log_info_v2
+INTO OUTFILE 'C:/Users/sharm/Documents/mySQL files/weight_log_info.csv' 
+FIELDS ENCLOSED BY '"'
+TERMINATED BY ';'
+ESCAPED BY '"'
+LINES TERMINATED BY '\r\n';  
